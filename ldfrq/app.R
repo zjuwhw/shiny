@@ -13,7 +13,15 @@ ui <- fluidPage(
             wellPanel(
                 h4("Notation for Haplotype and Allele Frequencies"),
                 tableOutput("table"),
-                span("A and B are the major alleles for locus 1 and 2")
+                span("A and B are the major alleles for locus 1 and 2"),
+                h4("Different measurements for LD"),
+                p("D=pAB-pA*pB"),
+                p("D'=D/min[pA(1-pB),pB(1-pA)] if D>0"),
+                p("or D/min[pApB,(1-pA)(1-pB)] if D<0"),
+                p("r^2=D^2/pApB(1-pA)(1-pB)")
+            ),
+            wellPanel(
+                p("Author: Huanwei Wang; Email: huanwei.wang@uq.edu.au")
             )
         ),
         mainPanel(
@@ -43,7 +51,7 @@ server <- function(input, output){
     output$rangepAB = renderText({paste("p(AB): from ", minnum()," to ", maxnum(), sep="")})
     output$rangeD = renderText({paste("D: from ",minnum()-input$pA*input$pB, " to ", maxnum()-input$pA*input$pB, sep="")})
     output$rangeDprime = renderText({"D': from -1 to 1"})
-    output$ranger2 = renderText({paste("r2: from 0 to ", min(input$pA*(1-input$pB)/input$pB/(1-input$pA),input$pB*(1-input$pA)/input$pA/(1-input$pB)),sep="")})
+    output$ranger2 = renderText({paste("r^2: from 0 to ", min(input$pA*(1-input$pB)/input$pB/(1-input$pA),input$pB*(1-input$pA)/input$pA/(1-input$pB)),sep="")})
     
     output$plot = renderPlot({
         pABseq = seq(from=minnum(), to=maxnum(), length.out=100)
